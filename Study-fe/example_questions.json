@@ -1,0 +1,32 @@
+[
+  {
+    "content": "什么是JavaScript闭包？",
+    "answer": "## 闭包定义\n\n闭包是指一个函数可以访问其**外部作用域**中的变量，即使外部函数已经执行完毕。\n\n### 代码示例\n\n```javascript\nfunction outer() {\n  let count = 0;\n  return function inner() {\n    count++;\n    console.log(count);\n  };\n}\n\nconst counter = outer();\ncounter(); // 1\ncounter(); // 2\n```\n\n### 闭包的特点\n\n- **数据私有化**：可以创建私有变量\n- **持久化存储**：变量不会被垃圾回收\n- **模块化编程**：实现模块模式\n\n> **注意**：过度使用闭包可能导致内存泄漏",
+    "category": "JavaScript"
+  },
+  {
+    "content": "解释React中的Hook是什么？",
+    "answer": "## Hook定义\n\nHook是React 16.8新增的特性，让你在不编写class的情况下使用state以及其他的React特性。\n\n### 常用Hook\n\n#### useState\n```javascript\nconst [count, setCount] = useState(0);\n```\n\n#### useEffect\n```javascript\nuseEffect(() => {\n  document.title = `计数: ${count}`;\n}, [count]);\n```\n\n### Hook规则\n\n1. **只能在函数组件顶层调用Hook**\n2. **不要在循环、条件或嵌套函数中调用Hook**\n3. **只能在React函数组件中调用Hook**\n\n### 自定义Hook\n\n```javascript\nfunction useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue);\n  \n  const increment = () => setCount(count + 1);\n  const decrement = () => setCount(count - 1);\n  \n  return { count, increment, decrement };\n}\n```",
+    "category": "React"
+  },
+  {
+    "content": "解释CSS盒模型",
+    "answer": "## CSS盒模型\n\nCSS盒模型是描述页面元素如何占据空间的模型。\n\n### 盒模型组成\n\n1. **Content（内容）**：元素的实际内容\n2. **Padding（内边距）**：内容与边框之间的空间\n3. **Border（边框）**：围绕内边距和内容的边框\n4. **Margin（外边距）**：边框外的空间\n\n### 两种盒模型\n\n#### 标准盒模型（content-box）\n```css\nbox-sizing: content-box; /* 默认值 */\nwidth: 200px;\npadding: 20px;\nborder: 2px solid black;\n/* 实际宽度 = 200 + 20*2 + 2*2 = 244px */\n```\n\n#### IE盒模型（border-box）\n```css\nbox-sizing: border-box;\nwidth: 200px;\npadding: 20px;\nborder: 2px solid black;\n/* 实际宽度 = 200px（包含padding和border）*/\n```\n\n> **最佳实践**：使用 `border-box` 更直观易用",
+    "category": "CSS"
+  },
+  {
+    "content": "什么是HTTP和HTTPS的区别？",
+    "answer": "## HTTP vs HTTPS\n\n### HTTP (HyperText Transfer Protocol)\n- **端口**：80\n- **安全性**：无加密，数据明文传输\n- **速度**：相对较快\n- **证书**：不需要SSL证书\n\n### HTTPS (HTTP Secure)\n- **端口**：443\n- **安全性**：SSL/TLS加密\n- **速度**：略慢（加密开销）\n- **证书**：需要SSL证书\n\n### HTTPS加密过程\n\n1. **握手阶段**：客户端与服务器协商加密算法\n2. **证书验证**：验证服务器身份\n3. **密钥交换**：生成会话密钥\n4. **数据传输**：使用对称加密传输数据\n\n```\n客户端 → 服务器：Hello（支持的加密算法）\n服务器 → 客户端：证书 + 选择的算法\n客户端 → 服务器：验证证书，生成密钥\n服务器 ↔ 客户端：加密数据传输\n```\n\n### 优势\n- **数据完整性**：防止数据被篡改\n- **身份认证**：确认服务器身份\n- **SEO友好**：搜索引擎优先索引HTTPS网站",
+    "category": "网络"
+  },
+  {
+    "content": "解释TCP三次握手过程",
+    "answer": "## TCP三次握手\n\nTCP三次握手是建立TCP连接的过程，确保客户端和服务器都能正常收发数据。\n\n### 握手过程\n\n```\n客户端                    服务器\n   |                        |\n   |    1. SYN=1, seq=x     |\n   |----------------------->|\n   |                        |\n   |  2. SYN=1, ACK=1       |\n   |     ack=x+1, seq=y     |\n   |<-----------------------|\n   |                        |\n   |    3. ACK=1            |\n   |     ack=y+1, seq=x+1   |\n   |----------------------->|\n   |                        |\n```\n\n### 详细步骤\n\n#### 第一次握手\n- **客户端**：发送SYN=1，seq=x\n- **状态**：客户端进入SYN-SENT状态\n- **目的**：请求建立连接\n\n#### 第二次握手\n- **服务器**：发送SYN=1，ACK=1，ack=x+1，seq=y\n- **状态**：服务器进入SYN-RECEIVED状态\n- **目的**：确认客户端请求，并请求确认\n\n#### 第三次握手\n- **客户端**：发送ACK=1，ack=y+1，seq=x+1\n- **状态**：双方进入ESTABLISHED状态\n- **目的**：确认服务器响应\n\n### 为什么需要三次握手？\n\n1. **防止重复连接**：避免历史连接请求干扰\n2. **同步序列号**：确保数据传输顺序\n3. **确认双向通信**：验证双方收发能力\n\n> **两次握手的问题**：无法确认客户端接收能力，可能造成资源浪费",
+    "category": "网络"
+  },
+  {
+    "content": "什么是Vue.js的响应式原理？",
+    "answer": "## Vue.js响应式原理\n\nVue.js通过数据劫持结合发布订阅模式实现响应式。\n\n### Vue 2.x 实现（Object.defineProperty）\n\n```javascript\nfunction defineReactive(obj, key, val) {\n  const dep = new Dep(); // 依赖收集器\n  \n  Object.defineProperty(obj, key, {\n    get() {\n      // 依赖收集\n      if (Dep.target) {\n        dep.addSub(Dep.target);\n      }\n      return val;\n    },\n    set(newVal) {\n      if (newVal === val) return;\n      val = newVal;\n      // 通知更新\n      dep.notify();\n    }\n  });\n}\n```\n\n### Vue 3.x 实现（Proxy）\n\n```javascript\nfunction reactive(target) {\n  return new Proxy(target, {\n    get(target, key, receiver) {\n      // 依赖收集\n      track(target, key);\n      return Reflect.get(target, key, receiver);\n    },\n    set(target, key, value, receiver) {\n      const result = Reflect.set(target, key, value, receiver);\n      // 触发更新\n      trigger(target, key);\n      return result;\n    }\n  });\n}\n```\n\n### 核心概念\n\n#### 1. 依赖收集（Dep）\n- 每个响应式属性都有一个Dep实例\n- 收集依赖该属性的Watcher\n\n#### 2. 观察者（Watcher）\n- 组件渲染、计算属性、侦听器都是Watcher\n- 当依赖变化时重新执行\n\n#### 3. 响应式对象（Observer）\n- 遍历对象所有属性\n- 递归处理嵌套对象\n\n### 优势对比\n\n| 特性 | Vue 2.x | Vue 3.x |\n|------|---------|----------|\n| 实现方式 | Object.defineProperty | Proxy |\n| 数组监听 | 需要特殊处理 | 原生支持 |\n| 新属性 | 需要Vue.set | 自动响应 |\n| 性能 | 初始化时递归 | 懒响应 |\n\n> **注意**：Vue 2.x无法检测数组索引和对象新属性的变化，需要使用特殊API",
+    "category": "Vue"
+  }
+] 
