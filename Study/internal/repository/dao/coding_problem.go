@@ -3,77 +3,12 @@ package dao
 import (
 	"Training/Study/internal/domain"
 	"context"
-	"database/sql/driver"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"time"
 
 	"gorm.io/gorm"
 )
-
-// StringSlice 自定义类型用于处理数组字段
-type StringSlice []string
-
-func (s StringSlice) Value() (driver.Value, error) {
-	if len(s) == 0 {
-		return "[]", nil
-	}
-	return json.Marshal(s)
-}
-
-func (s *StringSlice) Scan(value interface{}) error {
-	if value == nil {
-		*s = StringSlice{}
-		return nil
-	}
-
-	bytes, ok := value.([]byte)
-	if !ok {
-		return errors.New("type assertion to []byte failed")
-	}
-
-	return json.Unmarshal(bytes, s)
-}
-
-// CodingProblem 刷题问题数据库模型
-type CodingProblem struct {
-	Id             int64       `gorm:"primaryKey,autoIncrement" json:"id"`
-	Title          string      `gorm:"type:varchar(255);not null" json:"title"`
-	Difficulty     string      `gorm:"type:varchar(50)" json:"difficulty"`
-	Tags           StringSlice `gorm:"type:json" json:"tags"`
-	Source         string      `gorm:"type:varchar(100)" json:"source"`
-	SourceId       string      `gorm:"type:varchar(100)" json:"source_id"`
-	SourceUrl      string      `gorm:"type:varchar(500)" json:"source_url"`
-	StudyStatus    string      `gorm:"type:varchar(50);default:'not_started'" json:"study_status"` // 学习状态
-	LastStudied    *time.Time  `gorm:"type:datetime(3)" json:"last_studied"`                       // 最后学习时间
-	IsDailyProblem bool        `gorm:"type:boolean;default:false" json:"is_daily_problem"`         // 是否为每日一题
-	DailyDate      *time.Time  `gorm:"type:datetime(3)" json:"daily_date"`                         // 每日一题日期
-	IsHot100       bool        `gorm:"type:boolean;default:false" json:"is_hot100"`                // 是否为 Hot 100 题目
-	Ctime          time.Time   `gorm:"type:datetime(3)" json:"ctime"`
-	Utime          time.Time   `gorm:"type:datetime(3)" json:"utime"`
-}
-
-// DailyProblem 每日一题模型
-type DailyProblem struct {
-	Id         int64         `gorm:"primarykey,autoIncrement"`
-	Date       string        `gorm:"column:date;unique;not null"` // 格式: 2024-06-17
-	Title      string        `gorm:"type:varchar(255);not null"`
-	Difficulty string        `gorm:"type:varchar(50)"`
-	Tags       StringSlice   `gorm:"type:json"`
-	Source     string        `gorm:"type:varchar(100)"`
-	SourceId   string        `gorm:"type:varchar(100)"`
-	SourceUrl  string        `gorm:"type:varchar(500)"`
-	ProblemId  int64         `gorm:"column:problem_id;not null"`
-	Problem    CodingProblem `gorm:"foreignKey:ProblemId"`
-	Ctime      time.Time     `gorm:"type:datetime(3)"`
-	Utime      time.Time     `gorm:"type:datetime(3)"`
-}
-
-func (d DailyProblem) TableName() string {
-	return "daily_problems"
-}
 
 type CodingProblemDAO interface {
 	Insert(ctx context.Context, problem CodingProblem) error
@@ -98,45 +33,6 @@ type GormCodingProblemDAO struct {
 
 func NewGormCodingProblemDAO(db *gorm.DB) CodingProblemDAO {
 	return &GormCodingProblemDAO{db: db}
-}
-
-// 转换函数
-func (p *CodingProblem) toDomain() domain.CodingProblem {
-	return domain.CodingProblem{
-		Id:             p.Id,
-		Title:          p.Title,
-		Difficulty:     p.Difficulty,
-		Tags:           []string(p.Tags),
-		Source:         p.Source,
-		SourceId:       p.SourceId,
-		SourceUrl:      p.SourceUrl,
-		StudyStatus:    p.StudyStatus,
-		LastStudied:    p.LastStudied,
-		IsDailyProblem: p.IsDailyProblem,
-		DailyDate:      p.DailyDate,
-		IsHot100:       p.IsHot100,
-		Ctime:          p.Ctime,
-		Utime:          p.Utime,
-	}
-}
-
-func toDAOCodingProblem(p domain.CodingProblem) CodingProblem {
-	return CodingProblem{
-		Id:             p.Id,
-		Title:          p.Title,
-		Difficulty:     p.Difficulty,
-		Tags:           StringSlice(p.Tags),
-		Source:         p.Source,
-		SourceId:       p.SourceId,
-		SourceUrl:      p.SourceUrl,
-		StudyStatus:    p.StudyStatus,
-		LastStudied:    p.LastStudied,
-		IsDailyProblem: p.IsDailyProblem,
-		DailyDate:      p.DailyDate,
-		IsHot100:       p.IsHot100,
-		Ctime:          p.Ctime,
-		Utime:          p.Utime,
-	}
 }
 
 // CodingProblem CRUD 实现
@@ -346,15 +242,15 @@ func (g *GormCodingProblemDAO) UpdateStudyStatus(ctx context.Context, problemId 
 func (g *GormCodingProblemDAO) SaveDailyProblem(ctx context.Context, dailyProblem *domain.DailyProblem) error {
 	// 将domain.DailyProblem转换为dao.DailyProblem
 	daoDailyProblem := DailyProblem{
-		Date:        dailyProblem.Date.Format("2006-01-02"),
-		Title:       dailyProblem.Title,
-		Difficulty:  dailyProblem.Difficulty,
-		Tags:        StringSlice(dailyProblem.Tags),
-		Source:      dailyProblem.Source,
-		SourceId:    dailyProblem.SourceId,
-		SourceUrl:   dailyProblem.SourceUrl,
-		Ctime:       dailyProblem.Ctime,
-		Utime:       dailyProblem.Utime,
+		Date:       dailyProblem.Date.Format("2006-01-02"),
+		Title:      dailyProblem.Title,
+		Difficulty: dailyProblem.Difficulty,
+		Tags:       StringSlice(dailyProblem.Tags),
+		Source:     dailyProblem.Source,
+		SourceId:   dailyProblem.SourceId,
+		SourceUrl:  dailyProblem.SourceUrl,
+		Ctime:      dailyProblem.Ctime,
+		Utime:      dailyProblem.Utime,
 	}
 
 	// 首先检查是否已存在相同日期的记录
@@ -371,34 +267,4 @@ func (g *GormCodingProblemDAO) SaveDailyProblem(ctx context.Context, dailyProble
 	}
 
 	return err
-}
-
-// 自定义JSON序列化
-func (p *CodingProblem) BeforeCreate(tx *gorm.DB) error {
-	return nil
-}
-
-func (p *CodingProblem) AfterFind(tx *gorm.DB) error {
-	return nil
-}
-
-// 处理Tags字段的JSON序列化
-func (p CodingProblem) Value() (interface{}, error) {
-	return json.Marshal(p.Tags)
-}
-
-func (p *CodingProblem) Scan(value interface{}) error {
-	if value == nil {
-		p.Tags = []string{}
-		return nil
-	}
-
-	switch v := value.(type) {
-	case []byte:
-		return json.Unmarshal(v, &p.Tags)
-	case string:
-		return json.Unmarshal([]byte(v), &p.Tags)
-	default:
-		return fmt.Errorf("cannot scan %T into Tags", value)
-	}
 }

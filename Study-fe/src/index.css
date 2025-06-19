@@ -99,13 +99,15 @@ body {
 
 /* Header Styles */
 .header {
-  background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 2rem 0;
   margin-bottom: 2rem;
   box-shadow: 0 8px 32px var(--shadow);
   border-radius: 0 0 20px 20px;
   transition: box-shadow 0.3s ease;
+  position: relative;
+  z-index: 150;
 }
 
 .header h1 {
@@ -128,6 +130,8 @@ body {
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
+  position: relative;
+  z-index: 200;
 }
 
 .nav a {
@@ -139,6 +143,8 @@ body {
   font-weight: 500;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 200;
 }
 
 .nav a:hover, .nav a.active {
@@ -154,6 +160,8 @@ body {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 200;
 }
 
 .sub-nav a {
@@ -163,6 +171,8 @@ body {
   border-radius: 15px;
   transition: all 0.3s ease;
   font-size: 0.9rem;
+  position: relative;
+  z-index: 200;
 }
 
 .sub-nav a:hover, .sub-nav a.active {
@@ -313,12 +323,12 @@ body {
 
 /* Modern Header */
 .modern-header {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 2rem;
   color: white;
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
 }
 
 .header-content {

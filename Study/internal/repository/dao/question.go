@@ -104,14 +104,3 @@ func (dao *questionDao) GetMasteryStats(ctx context.Context) (map[string]int, er
 
 	return stats, nil
 }
-
-type Question struct {
-	Id           int64  `gorm:"primary_key,autoIncrement"`
-	Category     string `gorm:"type:varchar(100);not null"`
-	Content      string `gorm:"type:text;not null"`
-	Answer       string `gorm:"type:text;not null"`
-	MasteryLevel int    `gorm:"type:int;default:0"` // 0: 未学习, 1: 学习中, 2: 已掌握
-	Count        int64  `gorm:"type:bigint;not null"`
-	Ctime        int64  `gorm:"type:bigint;not null"`
-	Utime        int64  `gorm:"type:bigint;not null"`
-}

@@ -36,7 +36,6 @@ func (h *CodingProblemHandler) RegisterRoutes(server *gin.Engine) {
 	codingGroup.PUT("/problems/:id/study-status", h.UpdateStudyStatus)
 
 	// 管理功能
-	codingGroup.POST("/crawl-hot100", h.CrawlHot100Problems)
 }
 
 func (h *CodingProblemHandler) GetAllProblems(c *gin.Context) {
@@ -285,16 +284,4 @@ func (h *CodingProblemHandler) GetStats(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, stats)
-}
-
-// CrawlHot100Problems 爬取Hot100题目
-func (h *CodingProblemHandler) CrawlHot100Problems(c *gin.Context) {
-	go func() {
-		if err := h.service.CrawlAndSaveHot100Problems(c.Request.Context()); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-	}()
-
-	c.JSON(http.StatusOK, gin.H{"message": "Hot100题目爬取已开始，请稍候查看结果"})
 }

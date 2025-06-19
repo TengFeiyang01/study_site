@@ -21,16 +21,7 @@ type CodingProblemService interface {
 	// 爬虫相关方法
 	CrawlDailyProblem(ctx context.Context) error
 	CrawlProblemBySlug(ctx context.Context, titleSlug string) (*domain.CodingProblem, error)
-	BatchCrawlProblems(ctx context.Context, titleSlugs []string) error
 	StartDailyCrawler(ctx context.Context) error
-	// Hot 100 相关方法
-	CrawlAndSaveHot100Problems(ctx context.Context) error
-	GetHot100Problems() []struct {
-		ID         string
-		Title      string
-		TitleSlug  string
-		Difficulty string
-	}
 }
 
 type codingProblemService struct {
@@ -99,24 +90,6 @@ func (svc *codingProblemService) CrawlProblemBySlug(ctx context.Context, titleSl
 	return svc.crawler.CrawlProblemBySlug(ctx, titleSlug)
 }
 
-func (svc *codingProblemService) BatchCrawlProblems(ctx context.Context, titleSlugs []string) error {
-	return svc.crawler.BatchCrawlProblems(ctx, titleSlugs)
-}
-
 func (svc *codingProblemService) StartDailyCrawler(ctx context.Context) error {
 	return svc.crawler.StartDailyCrawler(ctx)
-}
-
-// Hot 100 相关方法实现
-func (svc *codingProblemService) CrawlAndSaveHot100Problems(ctx context.Context) error {
-	return svc.crawler.CrawlAndSaveHot100Problems(ctx)
-}
-
-func (svc *codingProblemService) GetHot100Problems() []struct {
-	ID         string
-	Title      string
-	TitleSlug  string
-	Difficulty string
-} {
-	return svc.crawler.GetHot100Problems()
 }

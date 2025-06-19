@@ -32,29 +32,9 @@ func NewCachedCodingProblemRepository(dao dao.CodingProblemDAO) CodingProblemRep
 	return &CachedCodingProblemRepository{dao: dao}
 }
 
-// 转换方法
-func (r *CachedCodingProblemRepository) toDomain(p dao.CodingProblem) domain.CodingProblem {
-	return domain.CodingProblem{
-		Id:             p.Id,
-		Title:          p.Title,
-		Difficulty:     p.Difficulty,
-		Tags:           []string(p.Tags),
-		Source:         p.Source,
-		SourceId:       p.SourceId,
-		SourceUrl:      p.SourceUrl,
-		StudyStatus:    p.StudyStatus,
-		LastStudied:    p.LastStudied,
-		IsDailyProblem: p.IsDailyProblem,
-		DailyDate:      p.DailyDate,
-		IsHot100:       p.IsHot100,
-		Ctime:          p.Ctime,
-		Utime:          p.Utime,
-	}
-}
-
 // CodingProblem Repository 实现
 func (r *CachedCodingProblemRepository) Create(ctx context.Context, problem domain.CodingProblem) error {
-	return r.dao.Insert(ctx, toDAOCodingProblem(problem))
+	return r.dao.Insert(ctx, toEntity(problem))
 }
 
 func (r *CachedCodingProblemRepository) FindAll(ctx context.Context) ([]domain.CodingProblem, error) {
@@ -114,30 +94,11 @@ func (r *CachedCodingProblemRepository) FindByDifficulty(ctx context.Context, di
 }
 
 func (r *CachedCodingProblemRepository) Update(ctx context.Context, problem domain.CodingProblem) error {
-	return r.dao.UpdateById(ctx, toDAOCodingProblem(problem))
+	return r.dao.UpdateById(ctx, toEntity(problem))
 }
 
 func (r *CachedCodingProblemRepository) Delete(ctx context.Context, id int64) error {
 	return r.dao.DeleteById(ctx, id)
-}
-
-func toDAOCodingProblem(p domain.CodingProblem) dao.CodingProblem {
-	return dao.CodingProblem{
-		Id:             p.Id,
-		Title:          p.Title,
-		Difficulty:     p.Difficulty,
-		Tags:           dao.StringSlice(p.Tags),
-		Source:         p.Source,
-		SourceId:       p.SourceId,
-		SourceUrl:      p.SourceUrl,
-		StudyStatus:    p.StudyStatus,
-		LastStudied:    p.LastStudied,
-		IsDailyProblem: p.IsDailyProblem,
-		DailyDate:      p.DailyDate,
-		IsHot100:       p.IsHot100,
-		Ctime:          p.Ctime,
-		Utime:          p.Utime,
-	}
 }
 
 func (c *CachedCodingProblemRepository) GetDailyProblem(ctx context.Context) (*domain.CodingProblem, error) {
@@ -180,4 +141,43 @@ func (c *CachedCodingProblemRepository) UpdateStudyStatus(ctx context.Context, p
 func (c *CachedCodingProblemRepository) SaveDailyProblem(dailyProblem *domain.DailyProblem) error {
 	ctx := context.Background()
 	return c.dao.SaveDailyProblem(ctx, dailyProblem)
+}
+
+func toEntity(p domain.CodingProblem) dao.CodingProblem {
+	return dao.CodingProblem{
+		Id:             p.Id,
+		Title:          p.Title,
+		Difficulty:     p.Difficulty,
+		Tags:           dao.StringSlice(p.Tags),
+		Source:         p.Source,
+		SourceId:       p.SourceId,
+		SourceUrl:      p.SourceUrl,
+		StudyStatus:    p.StudyStatus,
+		LastStudied:    p.LastStudied,
+		IsDailyProblem: p.IsDailyProblem,
+		DailyDate:      p.DailyDate,
+		IsHot100:       p.IsHot100,
+		Ctime:          p.Ctime,
+		Utime:          p.Utime,
+	}
+}
+
+// 转换方法
+func (r *CachedCodingProblemRepository) toDomain(p dao.CodingProblem) domain.CodingProblem {
+	return domain.CodingProblem{
+		Id:             p.Id,
+		Title:          p.Title,
+		Difficulty:     p.Difficulty,
+		Tags:           []string(p.Tags),
+		Source:         p.Source,
+		SourceId:       p.SourceId,
+		SourceUrl:      p.SourceUrl,
+		StudyStatus:    p.StudyStatus,
+		LastStudied:    p.LastStudied,
+		IsDailyProblem: p.IsDailyProblem,
+		DailyDate:      p.DailyDate,
+		IsHot100:       p.IsHot100,
+		Ctime:          p.Ctime,
+		Utime:          p.Utime,
+	}
 }
