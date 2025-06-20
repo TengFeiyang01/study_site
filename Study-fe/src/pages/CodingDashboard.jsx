@@ -17,6 +17,7 @@ const CodingDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(10)
 
+
   // 获取所有题目的来源列表
   const uniqueSources = [...new Set(problems.map(p => p.source).filter(Boolean))]
 
@@ -133,11 +134,16 @@ const CodingDashboard = () => {
     }
   }
 
+
+
   // 处理题目点击
-  const handleProblemClick = (problem) => {
-    if (problem?.source_url) {
-      window.open(problem.source_url, '_blank')
+  const handleProblemClick = async (problem) => {
+    if (!problem?.source_url) {
+      return
     }
+
+    // 直接打开LeetCode页面
+    window.open(problem.source_url, '_blank')
   }
 
   // 过滤题目

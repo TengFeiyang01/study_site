@@ -6,6 +6,7 @@ import QuestionForm from './pages/QuestionForm'
 import QuestionEdit from './pages/QuestionEdit'
 import CodingDashboard from './pages/CodingDashboard'
 
+
 // 内部组件，可以使用主题
 function AppContent() {
   const location = useLocation()
@@ -72,6 +73,7 @@ function AppContent() {
           <Route path="/edit/:id" element={<QuestionEdit />} />
           <Route path="/category/:category" element={<QuestionList />} />
           <Route path="/coding" element={<CodingDashboard />} />
+
         </Routes>
       </div>
     </div>
